@@ -17,7 +17,7 @@ class rssGenerator_item
 For additional information please reffer the documentation
  */
 
-class Rss extends \yii\base\Widget{
+class Rss extends \yii\base\Widget {
 	var $rss_version = '2.0';
 	var $encoding = 'utf-8';
 	var $stylesheet = '';
@@ -40,59 +40,61 @@ class Rss extends \yii\base\Widget{
 		$rss .= '<!-- Generated on ' . date('r') . ' -->' . "\n";
 		$rss .= '<rss version="' . $this->rss_version . '" xmlns:atom="http://www.w3.org/2005/Atom">' . "\n";
 		$rss .= '  <channel>' . "\n";
-		$rss .= '    <atom:link href="' . (array_key_exists('atomLinkHref',$channel ? $channel['atomLinkHref'] : $selfUrl) . '" rel="self" type="application/rss+xml" />' . "\n";
+		$rss .= '    <atom:link href="' . (array_key_exists('atomLinkHref', $channel) ? $channel['atomLinkHref'] : $selfUrl) . '" rel="self" type="application/rss+xml" />' . "\n";
 		$rss .= '    <title>' . $channel['title'] . '</title>' . "\n";
 		$rss .= '    <link>' . $channel['link'] . '</link>' . "\n";
 		$rss .= '    <description>' . $channel['description'] . '</description>' . "\n";
-		if (array_key_exists('language',$channel)) {
+		if (array_key_exists('language', $channel)) {
 			$rss .= '    <language>' . $channel['language'] . '</language>' . "\n";
 		}
-		if (array_key_exists('copyright',$channel)) {
+		if (array_key_exists('copyright', $channel)) {
 			$rss .= '    <copyright>' . $channel['copyright'] . '</copyright>' . "\n";
 		}
-		if (array_key_exists('managingEditor',$channel)) {
+		if (array_key_exists('managingEditor', $channel)) {
 			$rss .= '    <managingEditor>' . $channel['managingEditor'] . '</managingEditor>' . "\n";
 		}
-		if (array_key_exists('webMaster',$channel)) {
+		if (array_key_exists('webMaster', $channel)) {
 			$rss .= '    <webMaster>' . $channel['webMaster'] . '</webMaster>' . "\n";
 		}
-		if (array_key_exists('pubDate',$channel)) {
+		if (array_key_exists('pubDate', $channel)) {
 			$rss .= '    <pubDate>' . $channel['pubDate'] . '</pubDate>' . "\n";
 		}
-		if (array_key_exists('lastBuildDate',$channel)) {
+		if (array_key_exists('lastBuildDate', $channel)) {
 			$rss .= '    <lastBuildDate>' . $channel['lastBuildDate'] . '</lastBuildDate>' . "\n";
 		}
-		foreach ($channel['categories'] as $category) {
-			$rss .= '    <category';
-			if (array_key_exists($category['domain'])) {
-				$rss .= ' domain="' . $category['domain'] . '"';
+		if (array_key_exists('categories', $channel)) {
+			foreach ($channel['categories'] as $category) {
+				$rss .= '    <category';
+				if (array_key_exists($category['domain'])) {
+					$rss .= ' domain="' . $category['domain'] . '"';
+				}
+				$rss .= '>' . $category['name'] . '</category>' . "\n";
 			}
-			$rss .= '>' . $category['name'] . '</category>' . "\n";
 		}
-		if (array_key_exists('generator',$channel)) {
+		if (array_key_exists('generator', $channel)) {
 			$rss .= '    <generator>' . $channel['generator'] . '</generator>' . "\n";
 		}
-		if (array_key_exists($channel['docs'])) {
+		if (array_key_exists('docs', $channel)) {
 			$rss .= '    <docs>' . $channel->docs . '</docs>' . "\n";
 		}
-		if (array_key_exists('ttl',$channel)) {
+		if (array_key_exists('ttl', $channel)) {
 			$rss .= '    <ttl>' . $channel['ttl'] . '</ttl>' . "\n";
 		}
-		if (sizeof('skipHours',$channel)) {
+		if (array_key_exists('skipHours', $channel)) {
 			$rss .= '    <skipHours>' . "\n";
 			foreach ($channel['skipHours'] as $hour) {
 				$rss .= '      <hour>' . $hour . '</hour>' . "\n";
 			}
 			$rss .= '    </skipHours>' . "\n";
 		}
-		if (sizeof($channel['skipDays'])) {
+		if (array_key_exists('skipDays', $channel)) {
 			$rss .= '    <skipDays>' . "\n";
 			foreach ($channel['skipDays'] as $day) {
 				$rss .= '      <day>' . $day . '</day>' . "\n";
 			}
 			$rss .= '    </skipDays>' . "\n";
 		}
-		if (array_key_exists($channel['image'])) {
+		if (array_key_exists('image', $channel)) {
 			$image = $channel['image'];
 			$rss .= '    <image>' . "\n";
 			$rss .= '      <url>' . $image['url'] . '</url>' . "\n";
@@ -101,7 +103,7 @@ class Rss extends \yii\base\Widget{
 			if (array_key_exists('width', $image)) {
 				$rss .= '      <width>' . $image['width'] . '</width>' . "\n";
 			}
-			if (array_key_exists('height',$image)) {
+			if (array_key_exists('height', $image)) {
 				$rss .= '      <height>' . $image['height'] . '</height>' . "\n";
 			}
 			if (array_key_exists($image['description'])) {
@@ -109,77 +111,90 @@ class Rss extends \yii\base\Widget{
 			}
 			$rss .= '    </image>' . "\n";
 		}
-		if (array_key_exists('textInput',$channel)) {
+		if (array_key_exists('textInput', $channel)) {
 			$textInput = $channel['textInput'];
 			$rss .= '    <textInput>' . "\n";
-            if(array_key_exists('title', $textInput))
-            {
-			 $rss .= '      <title>' . $textInput->title . '</title>' . "\n";
-            }
-            if(array_key_exists('description', $textInput))
-			 $rss .= '      <description>' . $textInput['description'] . '</description>' . "\n";
-            if(array_key_exists('name', $textInput))
-			 $rss .= '      <name>' . $textInput['name'] . '</name>' . "\n";
-            if(array_key_exists('link', $textInput))
-			 $rss .= '      <link>' . $textInput['link'] . '</link>' . "\n";
+			if (array_key_exists('title', $textInput)) {
+				$rss .= '      <title>' . $textInput->title . '</title>' . "\n";
+			}
+			if (array_key_exists('description', $textInput)) {
+				$rss .= '      <description>' . $textInput['description'] . '</description>' . "\n";
+			}
+
+			if (array_key_exists('name', $textInput)) {
+				$rss .= '      <name>' . $textInput['name'] . '</name>' . "\n";
+			}
+
+			if (array_key_exists('link', $textInput)) {
+				$rss .= '      <link>' . $textInput['link'] . '</link>' . "\n";
+			}
+
 			$rss .= '    </textInput>' . "\n";
 		}
-		if (array_key_exists('cloud_domain',$channel) || array_key_exists('cloud_path',$channel) || array_key_exists('cloud_registerProcedure',$channel) || array_key_exists('cloud_protocol',$channel)) {
+		if (array_key_exists('cloud_domain', $channel) || array_key_exists('cloud_path', $channel) || array_key_exists('cloud_registerProcedure', $channel) || array_key_exists('cloud_protocol', $channel)) {
 			$rss .= '    <cloud domain="' . $channel['cloud_domain'] . '" ';
 			$rss .= 'port="' . $channel['cloud_port'] . '" path="' . $channel['cloud_path'] . '" ';
 			$rss .= 'registerProcedure="' . $channel['cloud_registerProcedure'] . '" ';
 			$rss .= 'protocol="' . $channel['cloud_protocol'] . '" />' . "\n";
 		}
-		if (array_key_exists($channel['extraXML'])) {
+		if (array_key_exists('extraXML', $channel)) {
 			$rss .= $channel['extraXML'] . "\n";
 		}
 		foreach ($channel['items'] as $item) {
 			$rss .= '    <item>' . "\n";
-			if (array_key_exists('title',$item)) {
+			if (array_key_exists('title', $item)) {
 				$rss .= '      <title>' . $item['title'] . '</title>' . "\n";
 			}
-			if (array_key_exists('description',$item)) {
+			if (array_key_exists('description', $item)) {
 				$rss .= '      <description>' . $item['description'] . '</description>' . "\n";
 			}
-			if (array_key_exists('link',$item)) {
+			if (array_key_exists('link', $item)) {
 				$rss .= '      <link>' . $item['link'] . '</link>' . "\n";
 			}
-			if (array_key_exists('pubDate',$item)) {
+			if (array_key_exists('pubDate', $item)) {
 				$rss .= '      <pubDate>' . $item['pubDate'] . '</pubDate>' . "\n";
 			}
-			if (array_key_exists('author',$item)) {
+			if (array_key_exists('author', $item)) {
 				$rss .= '      <author>' . $item['author'] . '</author>' . "\n";
 			}
-			if (array_key_exists('comments',$item)) {
+			if (array_key_exists('comments', $item)) {
 				$rss .= '      <comments>' . $item['comments'] . '</comments>' . "\n";
 			}
-			if (array_key_exists('guid',$item)) {
+			if (array_key_exists('guid', $item)) {
 				$rss .= '      <guid isPermaLink="';
-				$rss .= ($item['guid_isPermaLink'] ? 'true' : 'false') . '">';
+				if (array_key_exists('guid_isPermaLink', $item)) {
+					$rss .= ($item['guid_isPermaLink'] ? 'true' : 'false') . '">';
+				}
+
 				$rss .= $item['guid'] . '</guid>' . "\n";
 			}
-			if (array_key_exists('source',$item)) {
-                if(array_key_exists('source_url', $item))
-				    $rss .= '      <source url="' . $item['source_url'] . '">';
+			if (array_key_exists('source', $item)) {
+				if (array_key_exists('source_url', $item)) {
+					$rss .= '      <source url="' . $item['source_url'] . '">';
+				}
+
 				$rss .= $item['source'] . '</source>' . "\n";
 			}
-			if (array_key_exists('enclosure_url',$item) || array_key_exists('enclosure_type',$item)) {
+			if (array_key_exists('enclosure_url', $item) || array_key_exists('enclosure_type', $item)) {
 				$rss .= '      <enclosure url="' . $item['enclosure_url'] . '" ';
-                if(array_key_exists('enclosure_length', $item))
-				    $rss .= 'length="' . $item['enclosure_length'] . '" ';
+				if (array_key_exists('enclosure_length', $item)) {
+					$rss .= 'length="' . $item['enclosure_length'] . '" ';
+				}
+
 				$rss .= 'type="' . $item['enclosure_type'] . '" />' . "\n";
 			}
-            if(array_key_exists('categories', $item))
-            {
-    			foreach ($item['categories'] as $category) {
-    				$rss .= '      <category';
-    				if (array_key_exists('domain',$category)) {
-    					$rss .= ' domain="' . $category['domain'] . '"';
-    				}
-                    if(array_key_exists('name', $category))
-    				    $rss .= '>' . $category['name'] . '</category>' . "\n";
-    			}
-            }
+			if (array_key_exists('categories', $item)) {
+				foreach ($item['categories'] as $category) {
+					$rss .= '      <category';
+					if (array_key_exists('domain', $category)) {
+						$rss .= ' domain="' . $category['domain'] . '"';
+					}
+					if (array_key_exists('name', $category)) {
+						$rss .= '>' . $category['name'] . '</category>' . "\n";
+					}
+
+				}
+			}
 			$rss .= '    </item>' . "\n";
 		}
 		$rss .= '  </channel>' . "\r";
