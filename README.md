@@ -10,13 +10,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist persianyii/yii2-rss "*"
+php composer.phar require --prefer-dist persianyii/yii2-rss "dev-master"
 ```
 
 or add
 
 ```
-"persianyii/yii2-rss": "*"
+"persianyii/yii2-rss": "dev-master"
 ```
 
 to the require section of your `composer.json` file.
