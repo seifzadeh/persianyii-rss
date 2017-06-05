@@ -106,7 +106,7 @@ class Rss extends \yii\base\Widget {
 			if (array_key_exists('height', $image)) {
 				$rss .= '      <height>' . $image['height'] . '</height>' . "\n";
 			}
-			if (array_key_exists($image['description'])) {
+			if (array_key_exists('description',$image)) {
 				$rss .= '      <description>' . $image['description'] . '</description>' . "\n";
 			}
 			$rss .= '    </image>' . "\n";
